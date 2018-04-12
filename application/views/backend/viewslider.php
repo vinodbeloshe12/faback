@@ -22,7 +22,8 @@
 </div>
 <script>
 function drawtable(resultrow) {
-    var baseurl="http://localhost/fa/uploads/";
+    var baseurl="http://admin.findacross.com/uploads/";
+
     if(resultrow.status==1){
         var status="Enabled";
     }else{

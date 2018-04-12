@@ -16,6 +16,7 @@
 </div>
 </div>
 <div class="row">
+<span>400px X 400px</span>
 <div class="file-field input-field col s12 m6">
 <div class="btn blue darken-4">
 <span>Image</span>

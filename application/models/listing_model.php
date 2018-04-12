@@ -34,20 +34,38 @@ public function addReview($bid,$email,$name,$rating,$review,$status){
 
 
 public function addListing($bid, $buisnessname,$email,  $contact, $addline1, $addline2, $city, $pin,  $status, $type,$user){
-    $data=array("bid" => $bid,"buisnessname" => $buisnessname,"email" => $email,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"pin" => $pin,"status" => $status,"type" => $type,"user" => $user);
+    // $q="SELECT id FROM `fa_listing` where bid='$bid'";
+    $q= $this->db->query("SELECT id FROM fa_listing
+    WHERE bid = '".$bid."'");
+   
+    $count = $q->num_rows();
+    if($count==0){
+ $data=array("bid" => $bid,"buisnessname" => $buisnessname,"email" => $email,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"pin" => $pin,"status" => $status,"type" => $type,"user" => $user);
     $query=$this->db->insert( "fa_listing", $data );
     $id=$this->db->insert_id();
     $object = new stdClass();
     if($query){
+        $data['name']=$buisnessname;
+        $data['email']=$email;
+        $viewcontent = $this->load->view('emailer/signup', $data, true);
+        $this->email_model->emailer($viewcontent,'Welcome to Findacross','emailid010@gmail.com','');
         $q =$this->db->query("SELECT `bid` FROM `fa_listing` WHERE `id`='$id'")->row();
         $object->bid = $q->bid;
         $object->value = true;
         return $object;
     }
-else{
+    else{
     $object->value = false;
     return $object;
-}
+    }
+    }else{
+        $object = new stdClass();
+        $object->value = false;
+        $object->message = "Listing id already exists";
+        return $object;
+    }
+   
+   
 }
 public function beforeedit($id)
 {

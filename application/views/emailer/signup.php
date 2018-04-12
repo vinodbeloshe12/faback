@@ -16,8 +16,8 @@
                     <div style='margin:0 auto;width:90%'>
                         <div style='margin:50px auto;width:80%'>
                             <div align='center'>
-                                <img src='https://lh3.googleusercontent.com/Pxdd0TMeHMTq5J62Tju8xpHvhrWZ5FGbe5z61QThb8_YIxzdFSh_FBdxl74cIjdwZVioyEgvNVa9PA=w1366-h656' alt='Findacross' class='CToWUd'>
-                            </div>
+                            <img src='http://admin.findacross.com/assets/img/find.png' alt='Findacross' class='CToWUd'>
+                                </div>
                             <p style='color:#000;font-family:Roboto;font-size:20px'>Dear
                                 <span style='color:#000;font-family:Roboto;font-size:20px'>
                                     <?php echo $name; ?>

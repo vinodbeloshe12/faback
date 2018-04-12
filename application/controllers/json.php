@@ -156,17 +156,16 @@ public function registerUser(){
 }
 
 public function addListing(){
-    $data = json_decode(file_get_contents('php://input'), true);
-    // print_r($data);
-    $bid = $this->input->get_post("bid");
-    $bid = $data['bid'];
-    $buisnessname = $data['bname'];
-    $email = $data['email'];
-    $contact = $data['contact'];
-    $addline1 = $data['address'];
-    $addline2 = $data['landmark'];
-    $city = $data['city'];
-    $pin = $data['zip'];
+    // $data = json_decode(file_get_contents('php://input'), true);
+    // $bid = $data['bid'];
+    $bid = $this->input->post('bid');;
+    $buisnessname = $this->input->post('bname');
+    $email = $this->input->post('email');
+    $contact = $this->input->post('contact');
+    $addline1 = $this->input->post('address');
+    $addline2 = $this->input->post('landmark');
+    $city = $this->input->post('city');
+    $pin = $this->input->post('zip');
     $status = "2";
     $type = "1";
     $user="fa";

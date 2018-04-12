@@ -4,6 +4,7 @@
 </div>
 <form class='col s12' method='post' action='<?php echo site_url("site/createslidersubmit");?>' enctype= 'multipart/form-data'>
 <div class="row">
+<span>1600px X 800px</span>
 <div class="file-field input-field col s12 m6">
 <div class="btn blue darken-4">
 <span>Image</span>

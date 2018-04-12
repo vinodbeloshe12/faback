@@ -1444,6 +1444,208 @@ $this->load->view("json",$data);
 }
 
 
+
+public function viewadvertise()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="viewadvertise";
+$data["base_url"]=site_url("site/viewadvertisejson");
+$data["title"]="View advertise";
+$this->load->view("template",$data);
+}
+function viewadvertisejson()
+{
+$elements=array();
+$elements[0]=new stdClass();
+$elements[0]->field="`fa_advertise`.`id`";
+$elements[0]->sort="1";
+$elements[0]->header="id";
+$elements[0]->alias="id";
+$elements[1]=new stdClass();
+$elements[1]->field="`fa_advertise`.`lid`";
+$elements[1]->sort="1";
+$elements[1]->header="lid";
+$elements[1]->alias="lid";
+$elements[2]=new stdClass();
+$elements[2]->field="`fa_advertise`.`page`";
+$elements[2]->sort="1";
+$elements[2]->header="page";
+$elements[2]->alias="page";
+$elements[3]=new stdClass();
+$elements[3]->field="`fa_advertise`.`image`";
+$elements[3]->sort="1";
+$elements[3]->header="image";
+$elements[3]->alias="image";
+$elements[4]=new stdClass();
+$elements[4]->field="`fa_advertise`.`type`";
+$elements[4]->sort="1";
+$elements[4]->header="type";
+$elements[4]->alias="type";
+$elements[5]=new stdClass();
+$elements[5]->field="`fa_advertise`.`status`";
+$elements[5]->sort="1";
+$elements[5]->header="status";
+$elements[5]->alias="status";
+$elements[6]=new stdClass();
+$elements[6]->field="`fa_advertise`.`user`";
+$elements[6]->sort="1";
+$elements[6]->header="user";
+$elements[6]->alias="user";
+$elements[7]=new stdClass();
+$elements[7]->field="`fa_advertise`.`link`";
+$elements[7]->sort="1";
+$elements[7]->header="link";
+$elements[7]->alias="link";
+$elements[8]=new stdClass();
+$elements[8]->field="`fa_advertise`.`date`";
+$elements[8]->sort="1";
+$elements[8]->header="date";
+$elements[8]->alias="date";
+$search=$this->input->get_post("search");
+$pageno=$this->input->get_post("pageno");
+$orderby=$this->input->get_post("orderby");
+$orderorder=$this->input->get_post("orderorder");
+$maxrow=$this->input->get_post("maxrow");
+if($maxrow=="")
+{
+$maxrow=20;
+}
+if($orderby=="")
+{
+$orderby="id";
+$orderorder="ASC";
+}
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_advertise`");
+$this->load->view("json",$data);
+}
+
+public function createadvertise()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="createadvertise";
+$data[ 'lid' ] =$this->advertise_model->getdropdown();
+$data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data["title"]="Create advertise";
+$this->load->view("template",$data);
+}
+public function createadvertisesubmit() 
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("page","page","trim");
+$this->form_validation->set_rules("lid","lid","trim");
+$this->form_validation->set_rules("image","image","trim");
+$this->form_validation->set_rules("link","link","trim");
+$this->form_validation->set_rules("status","status","trim");
+$this->form_validation->set_rules("user","user","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="createadvertise";
+$data["title"]="Create advertise";
+$this->load->view("template",$data);
+}
+else
+{
+$id=$this->input->get_post("id");
+$page=$this->input->get_post("page");
+$lid=$this->input->get_post("lid");
+// $image=$this->input->get_post("image");
+
+
+$config['upload_path'] = './uploads/';
+$config['allowed_types'] = 'gif|jpg|png';
+$this->load->library('upload', $config);
+$filename="image";
+$image="";
+if (  $this->upload->do_upload($filename))
+{
+    $uploaddata = $this->upload->data();
+    $image=$uploaddata['file_name'];
+}
+
+
+$link=$this->input->get_post("link");
+$status=$this->input->get_post("status");
+$user=$this->input->get_post("user");
+if($this->advertise_model->create($lid,$page,$image,$link,$status,$user)==0)
+$data["alerterror"]="New advertise could not be created.";
+else
+$data["alertsuccess"]="advertise created Successfully.";
+$data["redirect"]="site/viewadvertise";
+$this->load->view("redirect",$data);
+}
+}
+public function editadvertise()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="editadvertise";
+$data["title"]="Edit advertise";
+$data[ 'category' ] =$this->category_model->getdropdown();
+$data[ 'status' ] =$this->category_model->getstatusdropdown();
+
+$data["before"]=$this->advertise_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+public function editadvertisesubmit()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("id","id","trim");
+$this->form_validation->set_rules("name","name","trim");
+$this->form_validation->set_rules("category","category","trim");
+$this->form_validation->set_rules("image","image","trim");
+$this->form_validation->set_rules("icon","icon","trim");
+$this->form_validation->set_rules("status","status","trim");
+$this->form_validation->set_rules("user","user","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="editadvertise";
+$data["title"]="Edit advertise";
+$data["before"]=$this->advertise_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+else
+{
+$id=$this->input->get_post("id");
+$name=$this->input->get_post("name");
+$category=$this->input->get_post("category");
+// $image=$this->input->get_post("image");
+$config['upload_path'] = './uploads/';
+$config['allowed_types'] = 'gif|jpg|png';
+$this->load->library('upload', $config);
+$filename="image";
+$image="";
+if (  $this->upload->do_upload($filename))
+{
+    $uploaddata = $this->upload->data();
+    $image=$uploaddata['file_name'];
+}
+
+$icon=$this->input->get_post("icon");
+$status=$this->input->get_post("status");
+$user=$this->input->get_post("user");
+if($this->advertise_model->edit($id,$name,$category,$image,$icon,$status,$user)==0)
+$data["alerterror"]="New advertise could not be Updated.";
+else
+$data["alertsuccess"]="advertise Updated Successfully.";
+$data["redirect"]="site/viewadvertise";
+$this->load->view("redirect",$data);
+}
+}
+public function deleteadvertise()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->advertise_model->delete($this->input->get("id"));
+$data["redirect"]="site/viewadvertise";
+$this->load->view("redirect",$data);
+}
+
 }
 ?>
 

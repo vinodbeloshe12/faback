@@ -7,6 +7,7 @@
 <form class='col s12' method='post' action='<?php echo site_url("site/editslidersubmit");?>' enctype= 'multipart/form-data'>
 <input type="hidden" id="normal-field" class="form-control" name="id" value="<?php echo set_value('id',$before->id);?>" style="display:none;">
 <div class="row">
+<span>1600px X 800px</span>
 			<div class="file-field input-field col m6 s12">
 				<span class="img-center big image">
                    			<?php if ($before->image == '') {

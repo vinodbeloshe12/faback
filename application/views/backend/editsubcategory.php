@@ -19,6 +19,7 @@
 </div>
 </div>
 <div class="row">
+<span>400px X 400px</span>
 <div class="file-field input-field col m6 s12">
     <span class="img-center big image">
                    <?php if ($before->image == '') {

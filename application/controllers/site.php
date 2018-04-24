@@ -1502,6 +1502,21 @@ $elements[8]->field="`fa_advertise`.`date`";
 $elements[8]->sort="1";
 $elements[8]->header="date";
 $elements[8]->alias="date";
+$elements[9]=new stdClass();
+$elements[9]->field="`fa_advertise`.`fromDate`";
+$elements[9]->sort="1";
+$elements[9]->header="fromDate";
+$elements[9]->alias="fromDate";
+$elements[10]=new stdClass();
+$elements[10]->field="`fa_advertise`.`toDate`";
+$elements[10]->sort="1";
+$elements[10]->header="toDate";
+$elements[10]->alias="toDate";
+$elements[11]=new stdClass();
+$elements[11]->field="`fa_listing`.`buisnessname`";
+$elements[11]->sort="1";
+$elements[11]->header="buisnessname";
+$elements[11]->alias="buisnessname";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
 $orderby=$this->input->get_post("orderby");
@@ -1516,7 +1531,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_advertise`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_advertise` LEFT JOIN `fa_listing` ON `fa_advertise`.`lid`=`fa_listing`.`id`");
 $this->load->view("json",$data);
 }
 
@@ -1527,6 +1542,7 @@ $this->checkaccess($access);
 $data["page"]="createadvertise";
 $data[ 'lid' ] =$this->advertise_model->getdropdown();
 $data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data[ 'pagedrp' ] =$this->advertise_model->getpagedropdown();
 $data["title"]="Create advertise";
 $this->load->view("template",$data);
 }
@@ -1550,8 +1566,10 @@ $this->load->view("template",$data);
 else
 {
 $id=$this->input->get_post("id");
-$page=$this->input->get_post("page");
+$pagedrp=$this->input->get_post("pagedrp");
 $lid=$this->input->get_post("lid");
+$fromDate=$this->input->get_post("fromDate");
+$toDate=$this->input->get_post("toDate");
 // $image=$this->input->get_post("image");
 
 
@@ -1567,10 +1585,11 @@ if (  $this->upload->do_upload($filename))
 }
 
 
-$link=$this->input->get_post("link");
+
 $status=$this->input->get_post("status");
+$link=$this->input->get_post("link");
 $user=$this->input->get_post("user");
-if($this->advertise_model->create($lid,$page,$image,$link,$status,$user)==0)
+if($this->advertise_model->create($lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user)==0)
 $data["alerterror"]="New advertise could not be created.";
 else
 $data["alertsuccess"]="advertise created Successfully.";
@@ -1584,9 +1603,9 @@ $access=array("1");
 $this->checkaccess($access);
 $data["page"]="editadvertise";
 $data["title"]="Edit advertise";
-$data[ 'category' ] =$this->category_model->getdropdown();
+$data[ 'lid' ] =$this->advertise_model->getdropdown();
 $data[ 'status' ] =$this->category_model->getstatusdropdown();
-
+$data[ 'pagedrp' ] =$this->advertise_model->getpagedropdown();
 $data["before"]=$this->advertise_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }
@@ -1612,8 +1631,10 @@ $this->load->view("template",$data);
 else
 {
 $id=$this->input->get_post("id");
-$name=$this->input->get_post("name");
-$category=$this->input->get_post("category");
+$pagedrp=$this->input->get_post("pagedrp");
+$lid=$this->input->get_post("lid");
+$fromDate=$this->input->get_post("fromDate");
+$toDate=$this->input->get_post("toDate");
 // $image=$this->input->get_post("image");
 $config['upload_path'] = './uploads/';
 $config['allowed_types'] = 'gif|jpg|png';
@@ -1626,10 +1647,10 @@ if (  $this->upload->do_upload($filename))
     $image=$uploaddata['file_name'];
 }
 
-$icon=$this->input->get_post("icon");
+$link=$this->input->get_post("link");
 $status=$this->input->get_post("status");
 $user=$this->input->get_post("user");
-if($this->advertise_model->edit($id,$name,$category,$image,$icon,$status,$user)==0)
+if($this->advertise_model->edit($id,$lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user)==0)
 $data["alerterror"]="New advertise could not be Updated.";
 else
 $data["alertsuccess"]="advertise Updated Successfully.";

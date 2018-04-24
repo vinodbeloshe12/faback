@@ -22,10 +22,28 @@
 </div>
 </div>
 </div>
+<div class=" row">
+<div class=" input-field col s6">
+<?php echo form_dropdown("pagedrp",$pagedrp,set_value('pagedrp'));?>
+<label>page</label>
+</div>
+</div>
 <div class="row">
 <div class="input-field col s6">
-<label for="icon">icon</label>
-<input type="text" id="icon" name="icon" value='<?php echo set_value('icon');?>'>
+<label for="link">link</label>
+<input type="text" id="link" name="link" value='<?php echo set_value('link');?>'>
+</div>
+</div>
+<div class="row">
+<div class="input-field col s6">
+<label for="fromDate">From Date</label>
+<input type="date" id="fromDate" name="fromDate" value='<?php echo set_value('fromDate');?>'>
+</div>
+</div>
+<div class="row">
+<div class="input-field col s6">
+<label for="toDate">To Date</label>
+<input type="date" id="toDate" name="toDate" value='<?php echo set_value('toDate');?>'>
 </div>
 </div>
 <div class=" row">
@@ -34,12 +52,7 @@
 <label>status</label>
 </div>
 </div>
-<div class="row">
-<div class="input-field col s6">
-<label for="user">user</label>
-<input type="text" id="user" name="user" value='<?php echo set_value('user');?>'>
-</div>
-</div>
+
 <div class="row">
 <div class="col s12 m6">
 <button type="submit" class="btn btn-primary waves-effect waves-light blue darken-4">Save</button>

@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class advertise_model extends CI_Model
 {
-public function create($lid,$page,$image,$link,$status,$user)
+public function create($lid,$page,$image,$fromDate,$toDate,$status,$link,$user)
 {
-$data=array("lid" => $lid,"page" => $page,"image" => $image,"link" => $link,"status" => $status,"user" => $user);
+$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user);
 $query=$this->db->insert( "fa_advertise", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -24,14 +24,14 @@ $this->db->where("id",$id);
 $query=$this->db->get("fa_advertise")->row();
 return $query;
 }
-public function edit($id,$lid,$page,$image,$link,$status,$user)
+public function edit($id,$lid,$page,$image,$fromDate,$toDate,$status,$link,$user)
 {
 if($image=="")
 {
 $image=$this->advertise_model->getimagebyid($id);
 $image=$image->image;
 }
-$data=array("lid" => $lid,"page" => $page,"image" => $image,"link" => $link,"status" => $status,"user" => $user);
+$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user);
 $this->db->where( "id", $id );
 $query=$this->db->update( "fa_advertise", $data );
 return 1;
@@ -54,6 +54,21 @@ public function getimagebyid($id)
 $query=$this->db->query("SELECT `image` FROM `fa_advertise` WHERE `id`='$id'")->row();
 return $query;
 }
+
+
+public function getpagedropdown()
+{
+    $pagedrp= array(
+         "Home" => "Home",
+         "Category" => "Category",
+         "Subategory" => "Subategory",
+         "Listing" => "Listing",
+         "Details" => "Details",
+        );
+    return $pagedrp;
+}
+
+
 public function getdropdown()
 {
 $query=$this->db->query("SELECT * FROM `fa_listing` ORDER BY `id` 
@@ -63,7 +78,7 @@ $return=array(
 );
 foreach($query as $row)
 {
-$return[$row->id]=$row->name;
+$return[$row->id]=$row->buisnessname;
 }
 return $return;
 }

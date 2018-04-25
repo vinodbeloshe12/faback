@@ -1384,65 +1384,188 @@ $this->load->view("redirect",$data);
 
 
 
-public function viewimage()
-{
-$access=array("1");
-$this->checkaccess($access);
-$data["base_url"]=site_url("site/viewimagejson");
-$data["title"]="View Image";
-$data["before"]=$this->input->get("id");
-$data["before1"]=$this->input->get("id");
-$data["before2"]=$this->input->get("id");
-$data["before3"]=$this->input->get("id");
-$data["before4"]=$this->input->get("id");
-$data["before5"]=$this->input->get("id");
-$data["page"]="viewimage";
-$data['page2']='block/listingblock';
-// $this->load->view("template",$data);
-$this->load->view("templatewith2",$data);
-}
-function viewimagejson()
-{
-$elements=array();
-$elements[0]=new stdClass();
-$elements[0]->field="`fa_images`.`id`";
-$elements[0]->sort="1";
-$elements[0]->header="id";
-$elements[0]->alias="id";
-$elements[1]=new stdClass();
-$elements[1]->field="`fa_images`.`lid`";
-$elements[1]->sort="1";
-$elements[1]->header="lid";
-$elements[1]->alias="lid";
-$elements[2]=new stdClass();
-$elements[2]->field="`fa_images`.`image`";
-$elements[2]->sort="1";
-$elements[2]->header="image";
-$elements[2]->alias="image";
-$elements[3]=new stdClass();
-$elements[3]->field="`fa_images`.`order`";
-$elements[3]->sort="1";
-$elements[3]->header="order";
-$elements[3]->alias="order";
 
-$search=$this->input->get_post("search");
-$pageno=$this->input->get_post("pageno");
-$orderby=$this->input->get_post("orderby");
-$orderorder=$this->input->get_post("orderorder");
-$maxrow=$this->input->get_post("maxrow");
-if($maxrow=="")
+public function viewlistingimage()
 {
-$maxrow=20;
+    $access = array('1');
+    $this->checkaccess($access);
+    $data['page'] = 'viewlistingimage';
+    $data['page2'] = 'block/listingblock';
+     $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $data['base_url'] = site_url('site/viewlistingimagejson?id=').$this->input->get('id');
+    $data['title'] = 'View listing Image';
+    $this->load->view('templatewith2', $data);
 }
-if($orderby=="")
+public function viewlistingimagejson()
 {
-$orderby="id";
-$orderorder="ASC";
-}
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_images`");
-$this->load->view("json",$data);
+    $id = $this->input->get('id');
+    $elements = array();
+    $elements[0] = new stdClass();
+    $elements[0]->field = '`fa_images`.`id`';
+    $elements[0]->sort = '1';
+    $elements[0]->header = 'id';
+    $elements[0]->alias = 'id';
+    $elements[1] = new stdClass();
+    $elements[1]->field = '`fa_images`.`image`';
+    $elements[1]->sort = '1';
+    $elements[1]->header = 'image';
+    $elements[1]->alias = 'image';
+    $elements[2] = new stdClass();
+    $elements[2]->field = '`fa_images`.`order`';
+    $elements[2]->sort = '1';
+    $elements[2]->header = 'order';
+    $elements[2]->alias = 'order';
+    $elements[3] = new stdClass();
+    $elements[3]->field = '`fa_images`.`lid`';
+    $elements[3]->sort = '1';
+    $elements[3]->header = 'lid';
+    $elements[3]->alias = 'lid';
+    $elements[4] = new stdClass();
+    $elements[4]->field = '`fa_images`.`status`';
+    $elements[4]->sort = '1';
+    $elements[4]->header = 'status';
+    $elements[4]->alias = 'status';
+    $search = $this->input->get_post('search');
+    $pageno = $this->input->get_post('pageno');
+    $orderby = $this->input->get_post('orderby');
+    $orderorder = $this->input->get_post('orderorder');
+    $maxrow = $this->input->get_post('maxrow');
+    if ($maxrow == '') {
+        $maxrow = 20;
+    }
+    if ($orderby == '') {
+        $orderby = 'id';
+        $orderorder = 'ASC';
+    }
+    $data['message'] = $this->chintantable->query($pageno, $maxrow, $orderby, $orderorder, $search, $elements, 'FROM `fa_images` ', "WHERE `fa_images`.`lid`='$id'");
+    $this->load->view('json', $data);
 }
 
+public function createlistingimage()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $data['page'] = 'createlistingimage';
+    $data['page2'] = 'block/listingblock';
+    $data['title'] = 'Create listing Image';
+    $data[ 'status' ] =$this->category_model->getstatusdropdown();
+    $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $this->load->view('templatewith2', $data);
+}
+public function createlistingimagesubmit()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $this->form_validation->set_rules('image', 'image', 'trim');
+    if ($this->form_validation->run() == false) {
+        $data['alerterror'] = validation_errors();
+        $data['page'] = 'createlistingimage';
+        $data['title'] = 'Create listing Image';
+        $this->load->view('template', $data);
+    } else {
+        $listing = $this->input->get_post('listing');
+        $order = $this->input->get_post('order');
+        $status = $this->input->get_post('status');
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $this->load->library('upload', $config);
+        $filename = 'image';
+        $image = '';
+        if ($this->upload->do_upload($filename)) {
+            $uploaddata = $this->upload->data();
+            $image = $uploaddata['file_name'];
+            $config_r['source_image'] = './uploads/'.$uploaddata['file_name'];
+            $config_r['maintain_ratio'] = true;
+            $config_t['create_thumb'] = false;///add this
+    $config_r['width'] = 800;
+            $config_r['height'] = 800;
+            $config_r['quality'] = 100;
+    //end of configs
+    $this->load->library('image_lib', $config_r);
+            $this->image_lib->initialize($config_r);
+            if (!$this->image_lib->resize()) {
+                echo 'Failed.'.$this->image_lib->display_errors();
+            //return false;
+            } else {
+                //print_r($this->image_lib->dest_image);
+            //dest_image
+            $image = $this->image_lib->dest_image;
+            //return false;
+            }
+        }
+     
+        if ($this->listingimage_model->create($listing, $order, $status, $image) == 0) {
+            $data['alerterror'] = 'New listing Image could not be created.';
+        } else {
+            $data['alertsuccess'] = 'listing Image created Successfully.';
+        }
+        $data['redirect'] = 'site/viewlistingimage?id='.$listing;
+        $this->load->view('redirect2', $data);
+    }
+}
+public function editlistingimage()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+   $data['page'] = 'editlistingimage';
+    $data['page2'] = 'block/listingblock';
+    $data[ 'status' ] =$this->category_model->getstatusdropdown();
+    $data['title'] = 'Edit listing Image';
+    $data['before'] = $this->listingimage_model->beforeedit($this->input->get('id'));
+    $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $this->load->view('templatewith2', $data);
+}
+public function editlistingimagesubmit()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $this->form_validation->set_rules('id', 'id', 'trim');
+    $this->form_validation->set_rules('image', 'image', 'trim');
+    if ($this->form_validation->run() == false) {
+        $data['alerterror'] = validation_errors();
+        $data['page'] = 'editlistingimage';
+        $data['title'] = 'Edit listing Image';
+        $data['before'] = $this->listingimage_model->beforeedit($this->input->get('id'));
+        $this->load->view('templatewith2', $data);
+    } else {
+        $id = $this->input->get_post('id');
+        $order = $this->input->get_post('order');
+        $listing = $this->input->get_post('listing');
+        $status = $this->input->get_post('status');
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $this->load->library('upload', $config);
+        $filename = 'image';
+        $image = '';
+        if ($this->upload->do_upload($filename)) {
+            $uploaddata = $this->upload->data();
+            $image = $uploaddata['file_name'];
+        }
+        if ($image == '') {
+            $image = $this->listingimage_model->getimagebyid($id);
+                // print_r($image);
+                 $image = $image->image;
+        }
+        if ($this->listingimage_model->edit($id, $order, $status, $image) == 0) {
+            $data['alerterror'] = 'New listing Image could not be Updated.';
+        } else {
+            $data['alertsuccess'] = 'listing Image Updated Successfully.';
+        }
+        $data['redirect'] = 'site/viewlistingimage?id='.$listing;
+        $this->load->view('redirect2', $data);
+    }
+}
+public function deletelistingimage()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $this->listingimage_model->delete($this->input->get('id'));
+    $data['redirect'] = 'site/viewlistingimage?id='.$this->input->get('listingid');
+    $this->load->view('redirect', $data);
+}
 
 
 public function viewadvertise()
@@ -1542,6 +1665,7 @@ $this->checkaccess($access);
 $data["page"]="createadvertise";
 $data[ 'lid' ] =$this->advertise_model->getdropdown();
 $data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data[ 'type' ] =$this->advertise_model->gettypedropdown();
 $data[ 'pagedrp' ] =$this->advertise_model->getpagedropdown();
 $data["title"]="Create advertise";
 $this->load->view("template",$data);
@@ -1567,6 +1691,7 @@ else
 {
 $id=$this->input->get_post("id");
 $pagedrp=$this->input->get_post("pagedrp");
+$type=$this->input->get_post("type");
 $lid=$this->input->get_post("lid");
 $fromDate=$this->input->get_post("fromDate");
 $toDate=$this->input->get_post("toDate");
@@ -1589,7 +1714,7 @@ if (  $this->upload->do_upload($filename))
 $status=$this->input->get_post("status");
 $link=$this->input->get_post("link");
 $user=$this->input->get_post("user");
-if($this->advertise_model->create($lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user)==0)
+if($this->advertise_model->create($lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user,$type)==0)
 $data["alerterror"]="New advertise could not be created.";
 else
 $data["alertsuccess"]="advertise created Successfully.";
@@ -1605,6 +1730,7 @@ $data["page"]="editadvertise";
 $data["title"]="Edit advertise";
 $data[ 'lid' ] =$this->advertise_model->getdropdown();
 $data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data[ 'type' ] =$this->advertise_model->gettypedropdown();
 $data[ 'pagedrp' ] =$this->advertise_model->getpagedropdown();
 $data["before"]=$this->advertise_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1632,6 +1758,7 @@ else
 {
 $id=$this->input->get_post("id");
 $pagedrp=$this->input->get_post("pagedrp");
+$type=$this->input->get_post("type");
 $lid=$this->input->get_post("lid");
 $fromDate=$this->input->get_post("fromDate");
 $toDate=$this->input->get_post("toDate");
@@ -1650,7 +1777,7 @@ if (  $this->upload->do_upload($filename))
 $link=$this->input->get_post("link");
 $status=$this->input->get_post("status");
 $user=$this->input->get_post("user");
-if($this->advertise_model->edit($id,$lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user)==0)
+if($this->advertise_model->edit($id,$lid,$pagedrp,$image,$fromDate,$toDate,$status,$link,$user,$type)==0)
 $data["alerterror"]="New advertise could not be Updated.";
 else
 $data["alertsuccess"]="advertise Updated Successfully.";

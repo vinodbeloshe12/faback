@@ -52,6 +52,12 @@
 <label>status</label>
 </div>
 </div>
+<div class=" row">
+<div class=" input-field col s6">
+<?php echo form_dropdown("type",$type,set_value('type'));?>
+<label>type</label>
+</div>
+</div>
 
 <div class="row">
 <div class="col s12 m6">

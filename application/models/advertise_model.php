@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class advertise_model extends CI_Model
 {
-public function create($lid,$page,$image,$fromDate,$toDate,$status,$link,$user)
+public function create($lid,$page,$image,$fromDate,$toDate,$status,$link,$user,$type)
 {
-$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user);
+$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user,"type" => $type);
 $query=$this->db->insert( "fa_advertise", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -24,14 +24,14 @@ $this->db->where("id",$id);
 $query=$this->db->get("fa_advertise")->row();
 return $query;
 }
-public function edit($id,$lid,$page,$image,$fromDate,$toDate,$status,$link,$user)
+public function edit($id,$lid,$page,$image,$fromDate,$toDate,$status,$link,$user,$type)
 {
 if($image=="")
 {
 $image=$this->advertise_model->getimagebyid($id);
 $image=$image->image;
 }
-$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user);
+$data=array("lid" => $lid,"page" => $page,"image" => $image,"fromDate" => $fromDate,"toDate" => $toDate,"status" => $status,"link" => $link,"user" => $user,"type" => $type);
 $this->db->where( "id", $id );
 $query=$this->db->update( "fa_advertise", $data );
 return 1;
@@ -66,6 +66,15 @@ public function getpagedropdown()
          "Details" => "Details",
         );
     return $pagedrp;
+}
+public function gettypedropdown()
+{
+    $type= array(
+         "1" => "Vertical",
+         "2" => "Horizontal",
+        
+        );
+    return $type;
 }
 
 

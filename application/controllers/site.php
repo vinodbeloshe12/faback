@@ -781,6 +781,11 @@ $elements[6]->field="`fa_subcategory`.`user`";
 $elements[6]->sort="1";
 $elements[6]->header="user";
 $elements[6]->alias="user";
+$elements[7]=new stdClass();
+$elements[7]->field="`fa_category`.`name`";
+$elements[7]->sort="1";
+$elements[7]->header="catname";
+$elements[7]->alias="catname";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
 $orderby=$this->input->get_post("orderby");
@@ -795,7 +800,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_subcategory`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_subcategory` LEFT JOIN `fa_category` ON `fa_subcategory`.`category` = `fa_category`.`id`");
 $this->load->view("json",$data);
 }
 
@@ -1563,11 +1568,149 @@ public function deletelistingimage()
     $access = array('1');
     $this->checkaccess($access);
     $this->listingimage_model->delete($this->input->get('id'));
-    $data['redirect'] = 'site/viewlistingimage?id='.$this->input->get('listingid');
+    $data['redirect'] = 'site/viewlistingimage?id='.$this->input->get('lid');
     $this->load->view('redirect', $data);
 }
 
 
+
+public function viewlistingvideo()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $data['page'] = 'viewlistingvideo';
+    $data['page2'] = 'block/listingblock';
+     $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $data['before3'] = $this->input->get('id');
+    $data['base_url'] = site_url('site/viewlistingvideojson?id=').$this->input->get('id');
+    $data['title'] = 'View listing Image';
+    $this->load->view('templatewith2', $data);
+}
+public function viewlistingvideojson()
+{
+    $id = $this->input->get('id');
+    $elements = array();
+    $elements[0] = new stdClass();
+    $elements[0]->field = '`fa_videos`.`id`';
+    $elements[0]->sort = '1';
+    $elements[0]->header = 'id';
+    $elements[0]->alias = 'id';
+    $elements[1] = new stdClass();
+    $elements[1]->field = '`fa_videos`.`video`';
+    $elements[1]->sort = '1';
+    $elements[1]->header = 'video';
+    $elements[1]->alias = 'video';
+    $elements[2] = new stdClass();
+    $elements[2]->field = '`fa_videos`.`order`';
+    $elements[2]->sort = '1';
+    $elements[2]->header = 'order';
+    $elements[2]->alias = 'order';
+    $elements[3] = new stdClass();
+    $elements[3]->field = '`fa_videos`.`lid`';
+    $elements[3]->sort = '1';
+    $elements[3]->header = 'lid';
+    $elements[3]->alias = 'lid';
+    $elements[4] = new stdClass();
+    $elements[4]->field = '`fa_videos`.`status`';
+    $elements[4]->sort = '1';
+    $elements[4]->header = 'status';
+    $elements[4]->alias = 'status';
+    $search = $this->input->get_post('search');
+    $pageno = $this->input->get_post('pageno');
+    $orderby = $this->input->get_post('orderby');
+    $orderorder = $this->input->get_post('orderorder');
+    $maxrow = $this->input->get_post('maxrow');
+    if ($maxrow == '') {
+        $maxrow = 20;
+    }
+    if ($orderby == '') {
+        $orderby = 'id';
+        $orderorder = 'ASC';
+    }
+    $data['message'] = $this->chintantable->query($pageno, $maxrow, $orderby, $orderorder, $search, $elements, 'FROM `fa_videos` ', "WHERE `fa_videos`.`lid`='$id'");
+    $this->load->view('json', $data);
+}
+
+public function createlistingvideo()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $data['page'] = 'createlistingvideo';
+    $data['page2'] = 'block/listingblock';
+    $data['title'] = 'Create listing Image';
+    $data[ 'status' ] =$this->category_model->getstatusdropdown();
+    $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $this->load->view('templatewith2', $data);
+}
+public function createlistingvideosubmit()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+   
+ 
+        $listing = $this->input->get_post('listing');
+        $order = $this->input->get_post('order');
+        $status = $this->input->get_post('status');
+        $video = $this->input->get_post('video');
+             if ($this->listingvideo_model->create($listing, $order, $status, $video) == 0) {
+            $data['alerterror'] = 'New listing video could not be created.';
+        } else {
+            $data['alertsuccess'] = 'listing video created Successfully.';
+        }
+        $data['redirect'] = 'site/viewlistingvideo?id='.$listing;
+        $this->load->view('redirect2', $data);
+ }
+public function editlistingvideo()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+   $data['page'] = 'editlistingvideo';
+    $data['page2'] = 'block/listingblock';
+    $data[ 'status' ] =$this->category_model->getstatusdropdown();
+    $data['title'] = 'Edit listing Image';
+    $data['before'] = $this->listingvideo_model->beforeedit($this->input->get('id'));
+    $data['before1'] = $this->input->get('id');
+    $data['before2'] = $this->input->get('id');
+    $this->load->view('templatewith2', $data);
+}
+public function editlistingvideosubmit()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $this->form_validation->set_rules('id', 'id', 'trim');
+ 
+    if ($this->form_validation->run() == false) {
+        $data['alerterror'] = validation_errors();
+        $data['page'] = 'editlistingvideo';
+        $data['title'] = 'Edit listing Image';
+        $data['before'] = $this->listingvideo_model->beforeedit($this->input->get('id'));
+        $this->load->view('templatewith2', $data);
+    } else {
+        $id = $this->input->get_post('id');
+        $order = $this->input->get_post('order');
+        $listing = $this->input->get_post('listing');
+        $status = $this->input->get_post('status');
+        $video = $this->input->get_post('video');
+       
+        if ($this->listingvideo_model->edit($id, $order, $status, $video) == 0) {
+            $data['alerterror'] = 'New listing video could not be Updated.';
+        } else {
+            $data['alertsuccess'] = 'listing video Updated Successfully.';
+        }
+        $data['redirect'] = 'site/viewlistingvideo?id='.$listing;
+        $this->load->view('redirect2', $data);
+    }
+}
+public function deletelistingvideo()
+{
+    $access = array('1');
+    $this->checkaccess($access);
+    $this->listingvideo_model->delete($this->input->get('id'));
+    $data['redirect'] = 'site/viewlistingvideo?id='.$this->input->get('lid');
+    $this->load->view('redirect', $data);
+}
 public function viewadvertise()
 {
 $access=array("1");

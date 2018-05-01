@@ -151,14 +151,14 @@ public function getAllCategoryById(){
 }
 
 public function registerUser(){
-    $data["message"]=$this->user_model->registerUserFronEnd('vinod', 'beloshe','vinodbeloshe122@gmail.com');
+    $data["message"]=$this->user_model->registerUserFronEnd('vinod', 'beloshe','asmitajadhav2593@gmail.com');
     $this->load->view("json",$data);  
 }
 
 public function addListing(){
     // $data = json_decode(file_get_contents('php://input'), true);
     // $bid = $data['bid'];
-    $bid = $this->input->post('bid');;
+    $bid = $this->input->post('bid');
     $buisnessname = $this->input->post('bname');
     $email = $this->input->post('email');
     $contact = $this->input->post('contact');
@@ -174,22 +174,20 @@ public function addListing(){
 }
 
 public function addReview(){
-    $data = json_decode(file_get_contents('php://input'), true);
-     $bid = $data['bid'];
-    $email = $data['email'];
-    $name = $data['name'];
-    $rating = $data['rating'];
-    $review = $data['review'];
+    // $data = json_decode(file_get_contents('php://input'), true);
+    $bid = $this->input->post('bid');
+    $email = $this->input->post('email');
+    $name = $this->input->post('name');
+    $rating = $this->input->post('rating');
+    $review = $this->input->post('review');
     $status = 1;
     $data["message"]=$this->listing_model->addReview($bid,$email,$name,$rating,$review,$status);
     $this->load->view("json",$data);  
 }
 
 public function login(){
-    $data = json_decode(file_get_contents('php://input'), true);
-    $username = $this->input->get_post("username");
-    $username = $data['username'];
-    $password = $data['password'];
+    $username =  $this->input->post("username");
+    $password =  $this->input->post("password");
     $data["message"]=$this->listing_model->login($username,$password);
     $this->load->view("json",$data);  
 }

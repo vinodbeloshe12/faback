@@ -122,25 +122,31 @@ $password=md5($password);
 }
 
 public function getAllListing($catid,$subcatid){
-    $query->category=$this->db->query("SELECT `id`, `name`, `order`, `image`, `icon` FROM `fa_subcategory` WHERE `status`=1 AND `category`='$catid'")->result();
+    // $query->category=$this->db->query("SELECT `id`, `name`, `order`, `image`, `icon` FROM `fa_subcategory` WHERE `status`=1 AND `category`='$catid'")->result();
+    $query->adsv=$this->db->query("SELECT `id`,  `image`, `link` FROM `fa_advertise` WHERE type=1 and status=1 and page='listing'")->result();
+    $query->adsh=$this->db->query("SELECT `id`,  `image`, `link` FROM `fa_advertise` WHERE type=2 and status=1 and page='listing'")->result();
     $query->listing=$this->db->query("SELECT fa_listing.id, fa_listing.regdate,fa_listing.bid, fa_listing.buisnessname,  fa_listing.addline1, fa_listing.addline2, fa_listing.city, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.status='1' AND `fa_listing`.subcategory='$subcatid' ORDER BY fa_listing.id DESC")->result();
     return $query;
 }
 
 public function getDetails($name){
     $chk= $this->db->query("SELECT fa_listing.status FROM fa_listing WHERE fa_listing.bid='$name'")->row();
-   
     if($chk->status==1){
         $query->details=$this->db->query("SELECT fa_listing.id, fa_listing.regdate,fa_listing.type,fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,  fa_listing.addline1, fa_listing.addline2, fa_listing.city, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.status='1' AND `fa_listing`.bid='$name'")->row();
-        
-            $query->images=$this->db->query("SELECT `id`, `image`, `order` FROM `fa_images` WHERE `lid`='$name'")->result();
+        $myId=$query->details->id;
+        $query->images=[];   
+        $query->images=$this->db->query("SELECT `id`, `image`, `order` FROM `fa_images` WHERE `lid`='$myId'")->result();
+        $query->videos=[];
+             $query->videos=$this->db->query("SELECT `id`, `video`, `order` FROM `fa_videos` WHERE `lid`='$myId'")->result();
             $query->ads=[];
-            $query->ads=$this->db->query("SELECT `id`, `page`, `type`, `image`, `link` FROM `fa_advertise` WHERE `lid`='$name'")->result();
-            $query->rating=$this->db->query("SELECT `id`, `name`, `email`, `rating`, `review`, `status`,`date` FROM `fa_rating` WHERE `bid`='$name'")->result();
+            $query->ads=$this->db->query("SELECT `id`, `page`, `type`, `image`, `link` FROM `fa_advertise` WHERE `lid`='$myId'")->result();
+            $query->rating=$this->db->query("SELECT `id`, `name`, `email`, `rating`, `review`, `status`,`date` FROM `fa_rating` WHERE `bid`='$myId'")->result();
     }else{
         $query->details=$this->db->query("SELECT fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,  fa_listing.addline1, fa_listing.addline2, fa_listing.city, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.user='fa' AND `fa_listing`.bid='$name'")->row(); 
         $query->images=[];
+        $query->videos=[];
         $query->ads=[];
+        $query->rating=[];
     }
 
     return $query;

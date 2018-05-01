@@ -8,7 +8,7 @@ public function registerUserFronEnd($firstname,$lastname,$email){
 	$data['name']=$firstname.' '.$lastname;
 	$data['email']=$email;
 	$viewcontent = $this->load->view('emailer/signup', $data, true);
-	$this->email_model->emailer($viewcontent,'Welcome to Findacross','vinodbeloshe12@gmail.com','');
+	$this->email_model->emailer($viewcontent,'Welcome to Findacross',$email,'');
 }
 
 

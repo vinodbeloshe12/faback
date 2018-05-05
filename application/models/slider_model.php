@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class slider_model extends CI_Model
 {
-public function create($image,$status)
+public function create($image,$status,$link)
 {
-$data=array("image" => $image,"status" => $status);
+$data=array("image" => $image,"status" => $status,"link" => $link);
 $query=$this->db->insert( "fa_slider", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -24,14 +24,14 @@ $this->db->where("id",$id);
 $query=$this->db->get("fa_slider")->row();
 return $query;
 }
-public function edit($id,$image,$status)
+public function edit($id,$image,$status,$link)
 {
 if($image=="")
 {
 $image=$this->slider_model->getimagebyid($id);
 $image=$image->image;
 }
-$data=array("image" => $image,"status" => $status);
+$data=array("image" => $image,"status" => $status,"link" => $link);
 $this->db->where( "id", $id );
 $query=$this->db->update( "fa_slider", $data );
 return 1;

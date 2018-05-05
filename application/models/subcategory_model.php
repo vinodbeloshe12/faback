@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class subcategory_model extends CI_Model
 {
-public function create($name,$category,$image,$icon,$status,$user)
+public function create($name,$category,$image,$icon,$status,$order)
 {
-$data=array("name" => $name,"category" => $category,"image" => $image,"icon" => $icon,"status" => $status,"user" => $user);
+$data=array("name" => $name,"category" => $category,"image" => $image,"icon" => $icon,"status" => $status,"order" => $order);
 $query=$this->db->insert( "fa_subcategory", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -24,14 +24,14 @@ $this->db->where("id",$id);
 $query=$this->db->get("fa_subcategory")->row();
 return $query;
 }
-public function edit($id,$name,$category,$image,$icon,$status,$user)
+public function edit($id,$name,$category,$image,$icon,$status,$order)
 {
 if($image=="")
 {
 $image=$this->subcategory_model->getimagebyid($id);
 $image=$image->image;
 }
-$data=array("name" => $name,"category" => $category,"image" => $image,"icon" => $icon,"status" => $status,"user" => $user);
+$data=array("name" => $name,"category" => $category,"image" => $image,"icon" => $icon,"status" => $status,"order" => $order);
 $this->db->where( "id", $id );
 $query=$this->db->update( "fa_subcategory", $data );
 return 1;
@@ -39,7 +39,7 @@ return 1;
 
 
 public function getAllCategoryById($id){
-    $query=$this->db->query("SELECT `id`, `name`, `order`, `image`, `icon` FROM `fa_subcategory` WHERE `status`=1 AND `category`='$id'")->result();
+    $query=$this->db->query("SELECT `id`, `name`, `order`, `image`, `icon` FROM `fa_subcategory` WHERE `status`=1 AND `category`='$id' ORDER BY `order` ASC")->result();
     return $query;
 }
 

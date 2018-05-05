@@ -41,8 +41,8 @@
 </div>
 <div class="row">
 <div class="input-field col s6">
-<label for="user">user</label>
-<input type="text" id="user" name="user" value='<?php echo set_value('user');?>'>
+<label for="order">order</label>
+<input type="text" id="order" name="order" value='<?php echo set_value('order');?>'>
 </div>
 </div>
 <div class="row">

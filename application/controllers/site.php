@@ -599,6 +599,11 @@ $elements[5]->field="`fa_category`.`user`";
 $elements[5]->sort="1";
 $elements[5]->header="user";
 $elements[5]->alias="user";
+$elements[6]=new stdClass();
+$elements[6]->field="`fa_category`.`order`";
+$elements[6]->sort="1";
+$elements[6]->header="order";
+$elements[6]->alias="order";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
 $orderby=$this->input->get_post("orderby");
@@ -610,8 +615,8 @@ $maxrow=20;
 }
 if($orderby=="")
 {
-$orderby="id";
-$orderorder="ASC";
+$orderby="order";
+$orderorder="DESC";
 }
 $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_category`");
 $this->load->view("json",$data);
@@ -662,8 +667,8 @@ if (  $this->upload->do_upload($filename))
 
 $icon=$this->input->get_post("icon");
 $status=$this->input->get_post("status");
-$user=$this->input->get_post("user");
-if($this->category_model->create($name,$image,$icon,$status,$user)==0)
+$order=$this->input->get_post("order");
+if($this->category_model->create($name,$image,$icon,$status,$order)==0)
 $data["alerterror"]="New category could not be created.";
 else
 $data["alertsuccess"]="category created Successfully.";
@@ -716,9 +721,9 @@ $name=$this->input->get_post("name");
 // $image=$this->input->get_post("image");
 $icon=$this->input->get_post("icon");
 $status=$this->input->get_post("status");
-$user=$this->input->get_post("user");
+$order=$this->input->get_post("order");
 
-if($this->category_model->edit($id,$name,$image,$icon,$status,$user)==0)
+if($this->category_model->edit($id,$name,$image,$icon,$status,$order)==0)
 $data["alerterror"]="New category could not be Updated.";
 else
 $data["alertsuccess"]="category Updated Successfully.";
@@ -786,6 +791,11 @@ $elements[7]->field="`fa_category`.`name`";
 $elements[7]->sort="1";
 $elements[7]->header="catname";
 $elements[7]->alias="catname";
+$elements[8]=new stdClass();
+$elements[8]->field="`fa_subcategory`.`order`";
+$elements[8]->sort="1";
+$elements[8]->header="order";
+$elements[8]->alias="order";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
 $orderby=$this->input->get_post("orderby");
@@ -797,8 +807,8 @@ $maxrow=20;
 }
 if($orderby=="")
 {
-$orderby="id";
-$orderorder="ASC";
+$orderby="order";
+$orderorder="DESC";
 }
 $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_subcategory` LEFT JOIN `fa_category` ON `fa_subcategory`.`category` = `fa_category`.`id`");
 $this->load->view("json",$data);
@@ -853,8 +863,8 @@ if (  $this->upload->do_upload($filename))
 
 $icon=$this->input->get_post("icon");
 $status=$this->input->get_post("status");
-$user=$this->input->get_post("user");
-if($this->subcategory_model->create($name,$category,$image,$icon,$status,$user)==0)
+$order=$this->input->get_post("order");
+if($this->subcategory_model->create($name,$category,$image,$icon,$status,$order)==0)
 $data["alerterror"]="New subcategory could not be created.";
 else
 $data["alertsuccess"]="subcategory created Successfully.";
@@ -912,8 +922,8 @@ if (  $this->upload->do_upload($filename))
 
 $icon=$this->input->get_post("icon");
 $status=$this->input->get_post("status");
-$user=$this->input->get_post("user");
-if($this->subcategory_model->edit($id,$name,$category,$image,$icon,$status,$user)==0)
+$order=$this->input->get_post("order");
+if($this->subcategory_model->edit($id,$name,$category,$image,$icon,$status,$order)==0)
 $data["alerterror"]="New subcategory could not be Updated.";
 else
 $data["alertsuccess"]="subcategory Updated Successfully.";
@@ -1320,7 +1330,8 @@ if (  $this->upload->do_upload($filename))
     $image=$uploaddata['file_name'];
 }
 $status=$this->input->get_post("status");
-if($this->slider_model->create($image,$status)==0)
+$link=$this->input->get_post("link");
+if($this->slider_model->create($image,$status,$link)==0)
 $data["alerterror"]="New slider could not be created.";
 else
 $data["alertsuccess"]="slider created Successfully.";
@@ -1370,7 +1381,8 @@ if (  $this->upload->do_upload($filename))
     $image=$uploaddata['file_name'];
 }
 $status=$this->input->get_post("status");
-if($this->slider_model->edit($id,$image,$status)==0)
+$link=$this->input->get_post("link");
+if($this->slider_model->edit($id,$image,$status,$link)==0)
 $data["alerterror"]="New slider could not be Updated.";
 else
 $data["alertsuccess"]="slider Updated Successfully.";
@@ -1936,6 +1948,174 @@ $this->advertise_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewadvertise";
 $this->load->view("redirect",$data);
 }
+
+
+
+
+public function viewcontent()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="viewcontent";
+$data["base_url"]=site_url("site/viewcontentjson");
+$data["title"]="View content";
+$this->load->view("template",$data);
+}
+function viewcontentjson()
+{
+$elements=array();
+$elements[0]=new stdClass();
+$elements[0]->field="`fa_content`.`id`";
+$elements[0]->sort="1";
+$elements[0]->header="id";
+$elements[0]->alias="id";
+$elements[1]=new stdClass();
+$elements[1]->field="`fa_content`.`image`";
+$elements[1]->sort="1";
+$elements[1]->header="image";
+$elements[1]->alias="image";
+$elements[2]=new stdClass();
+$elements[2]->field="`fa_content`.`status`";
+$elements[2]->sort="1";
+$elements[2]->header="status";
+$elements[2]->alias="status";
+$elements[3]=new stdClass();
+$elements[3]->field="`fa_content`.`description`";
+$elements[3]->sort="1";
+$elements[3]->header="description";
+$elements[3]->alias="description";
+$elements[4]=new stdClass();
+$elements[4]->field="`fa_content`.`title`";
+$elements[4]->sort="1";
+$elements[4]->header="title";
+$elements[4]->alias="title";
+$search=$this->input->get_post("search");
+$pageno=$this->input->get_post("pageno");
+$orderby=$this->input->get_post("orderby");
+$orderorder=$this->input->get_post("orderorder");
+$maxrow=$this->input->get_post("maxrow");
+if($maxrow=="")
+{
+$maxrow=20;
+}
+if($orderby=="")
+{
+$orderby="id";
+$orderorder="ASC";
+}
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `fa_content`");
+$this->load->view("json",$data);
+}
+
+public function createcontent()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="createcontent";
+$data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data["title"]="Create content";
+$this->load->view("template",$data);
+}
+public function createcontentsubmit() 
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("image","image","trim");
+$this->form_validation->set_rules("status","status","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="createcontent";
+$data["title"]="Create content";
+$this->load->view("template",$data);
+}
+else
+{
+$id=$this->input->get_post("id");
+// $image=$this->input->get_post("image");
+
+$config['upload_path'] = './uploads/';
+$config['allowed_types'] = 'gif|jpg|png';
+$this->load->library('upload', $config);
+$filename="image";
+$image="";
+if (  $this->upload->do_upload($filename))
+{
+    $uploaddata = $this->upload->data();
+    $image=$uploaddata['file_name'];
+}
+$status=$this->input->get_post("status");
+$title=$this->input->get_post("title");
+$description=$this->input->get_post("description");
+if($this->content_model->create($image,$status,$title,$description)==0)
+$data["alerterror"]="New content could not be created.";
+else
+$data["alertsuccess"]="content created Successfully.";
+$data["redirect"]="site/viewcontent";
+$this->load->view("redirect",$data);
+}
+}
+public function editcontent()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="editcontent";
+$data["title"]="Edit content";
+$data[ 'status' ] =$this->category_model->getstatusdropdown();
+$data["before"]=$this->content_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+public function editcontentsubmit()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("id","id","trim");
+$this->form_validation->set_rules("image","image","trim");
+$this->form_validation->set_rules("status","status","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="editcontent";
+$data["title"]="Edit content";
+$data["before"]=$this->content_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+else
+{
+$id=$this->input->get_post("id");
+// $image=$this->input->get_post("image");
+
+
+$config['upload_path'] = './uploads/';
+$config['allowed_types'] = 'gif|jpg|png';
+$this->load->library('upload', $config);
+$filename="image";
+$image="";
+if (  $this->upload->do_upload($filename))
+{
+    $uploaddata = $this->upload->data();
+    $image=$uploaddata['file_name'];
+}
+$status=$this->input->get_post("status");
+$title=$this->input->get_post("title");
+$description=$this->input->get_post("description");
+if($this->content_model->edit($id,$image,$status,$title,$description)==0)
+$data["alerterror"]="New content could not be Updated.";
+else
+$data["alertsuccess"]="content Updated Successfully.";
+$data["redirect"]="site/viewcontent";
+$this->load->view("redirect",$data);
+}
+}
+public function deletecontent()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->content_model->delete($this->input->get("id"));
+$data["redirect"]="site/viewcontent";
+$this->load->view("redirect",$data);
+}
+
 
 }
 ?>

@@ -87,6 +87,12 @@
 </div>
 <div class="row">
 <div class="col s12 m6">
+<label>services</label>
+<textarea name="services" placeholder="Enter text ..."><?php echo set_value( 'services',$before->services);?></textarea>
+</div>
+</div>
+<div class="row">
+<div class="col s12 m6">
 <label>about</label>
 <textarea id="some-textarea" name="about" placeholder="Enter text ...">
                    <?php echo set_value('about',$before->about);?>

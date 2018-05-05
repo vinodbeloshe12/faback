@@ -84,6 +84,12 @@
 </div>
 <div class="row">
 <div class="input-field col s12">
+<textarea name="services" class="materialize-textarea" length="400"><?php echo set_value( 'services');?></textarea>
+<label>services</label>
+</div>
+</div>
+<div class="row">
+<div class="input-field col s12">
 <textarea name="about" class="materialize-textarea" length="400"><?php echo set_value( 'about');?></textarea>
 <label>about</label>
 </div>

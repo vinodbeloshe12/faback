@@ -144,6 +144,8 @@ public function getHomeData(){
     $this->load->view("json",$data);  
 }
 
+
+
 public function getAllCategoryById(){
     $id=$this->input->get_post("id");
     $data["message"]=$this->subcategory_model->getAllCategoryById($id);
@@ -216,6 +218,13 @@ public function getsinglesubcategory()
 {
 $id=$this->input->get_post("id");
 $data["message"]=$this->subcategory_model->getsinglesubcategory($id);
+$this->load->view("json",$data);
+}
+
+public function getContent()
+{
+$id=$this->input->get_post("id");
+$data["message"]=$this->content_model->getContent($id);
 $this->load->view("json",$data);
 }
 } ?>

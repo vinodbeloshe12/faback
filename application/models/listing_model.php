@@ -12,9 +12,9 @@ public function search($searchTerm){
 }
 }
 
-public function create($bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)
+public function create($bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$services,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)
 {
-$data=array("bid" => $bid,"buisnessname" => $buisnessname,"category" => $category,"subcategory" => $subcategory,"cperson" => $cperson,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"state" => $state,"pin" => $pin,"country" => $country,"keywords" => $keywords,"about" => $about,"email" => $email,"facebook" => $facebook,"twitter" => $twitter,"google" => $google,"linkedin" => $linkedin,"status" => $status,"type" => $type,"user" => $user,"date" => $date);
+$data=array("bid" => $bid,"buisnessname" => $buisnessname,"category" => $category,"subcategory" => $subcategory,"cperson" => $cperson,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"state" => $state,"pin" => $pin,"country" => $country,"keywords" => $keywords,"services" => $services,"about" => $about,"email" => $email,"facebook" => $facebook,"twitter" => $twitter,"google" => $google,"linkedin" => $linkedin,"status" => $status,"type" => $type,"user" => $user,"date" => $date);
 $query=$this->db->insert( "fa_listing", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -78,14 +78,14 @@ $this->db->where("id",$id);
 $query=$this->db->get("fa_listing")->row();
 return $query;
 }
-public function edit($id,$bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)
+public function edit($id,$bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$services,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)
 {
 if($image=="")
 {
 $image=$this->listing_model->getimagebyid($id);
 $image=$image->image;
 }
-$data=array("bid" => $bid,"buisnessname" => $buisnessname,"category" => $category,"subcategory" => $subcategory,"cperson" => $cperson,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"state" => $state,"pin" => $pin,"country" => $country,"keywords" => $keywords,"about" => $about,"email" => $email,"facebook" => $facebook,"twitter" => $twitter,"google" => $google,"linkedin" => $linkedin,"status" => $status,"type" => $type,"user" => $user,"date" => $date);
+$data=array("bid" => $bid,"buisnessname" => $buisnessname,"category" => $category,"subcategory" => $subcategory,"cperson" => $cperson,"contact" => $contact,"addline1" => $addline1,"addline2" => $addline2,"city" => $city,"state" => $state,"pin" => $pin,"country" => $country,"keywords" => $keywords,"services" => $services,"about" => $about,"email" => $email,"facebook" => $facebook,"twitter" => $twitter,"google" => $google,"linkedin" => $linkedin,"status" => $status,"type" => $type,"user" => $user,"date" => $date);
 $this->db->where( "id", $id );
 $query=$this->db->update( "fa_listing", $data );
 return 1;
@@ -132,7 +132,8 @@ public function getAllListing($catid,$subcatid){
 public function getDetails($name){
     $chk= $this->db->query("SELECT fa_listing.status FROM fa_listing WHERE fa_listing.bid='$name'")->row();
     if($chk->status==1){
-        $query->details=$this->db->query("SELECT fa_listing.id, fa_listing.regdate,fa_listing.type,fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,  fa_listing.addline1, fa_listing.addline2, fa_listing.city, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.status='1' AND `fa_listing`.bid='$name'")->row();
+        $query->details=$this->db->query("SELECT fa_listing.id, fa_listing.regdate,fa_listing.type,fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,
+          fa_listing.addline1, fa_listing.addline2, fa_listing.city,fa_listing.services, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.status='1' AND `fa_listing`.bid='$name'")->row();
         $myId=$query->details->id;
         $query->images=[];   
         $query->images=$this->db->query("SELECT `id`, `image`, `order` FROM `fa_images` WHERE `lid`='$myId'")->result();

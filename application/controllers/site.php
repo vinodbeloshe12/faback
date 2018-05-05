@@ -1134,6 +1134,7 @@ $state=$this->input->get_post("state");
 $pin=$this->input->get_post("pin");
 $country=$this->input->get_post("country");
 $keywords=$this->input->get_post("keywords");
+$services=$this->input->get_post("services");
 $about=$this->input->get_post("about");
 $email=$this->input->get_post("email");
 $facebook=$this->input->get_post("facebook");
@@ -1144,7 +1145,7 @@ $status=$this->input->get_post("status");
 $type=$this->input->get_post("type");
 $user=$this->input->get_post("user");
 $date=$this->input->get_post("date");
-if($this->listing_model->create($bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)==0)
+if($this->listing_model->create($bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$services,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)==0)
 $data["alerterror"]="New listing could not be created.";
 else
 $data["alertsuccess"]="listing created Successfully.";
@@ -1221,6 +1222,7 @@ $state=$this->input->get_post("state");
 $pin=$this->input->get_post("pin");
 $country=$this->input->get_post("country");
 $keywords=$this->input->get_post("keywords");
+$services=$this->input->get_post("services");
 $about=$this->input->get_post("about");
 $email=$this->input->get_post("email");
 $facebook=$this->input->get_post("facebook");
@@ -1231,7 +1233,7 @@ $status=$this->input->get_post("status");
 $type=$this->input->get_post("type");
 $user=$this->input->get_post("user");
 $date=$this->input->get_post("date");
-if($this->listing_model->edit($id,$bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)==0)
+if($this->listing_model->edit($id,$bid,$buisnessname,$category,$subcategory,$cperson,$contact,$addline1,$addline2,$city,$state,$pin,$country,$keywords,$services,$about,$email,$facebook,$twitter,$google,$linkedin,$status,$type,$user,$date)==0)
 $data["alerterror"]="New listing could not be Updated.";
 else
 $data["alertsuccess"]="listing Updated Successfully.";

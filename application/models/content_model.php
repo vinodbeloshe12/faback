@@ -46,6 +46,12 @@ public function getimagebyid($id)
 $query=$this->db->query("SELECT `image` FROM `fa_content` WHERE `id`='$id'")->row();
 return $query;
 }
+
+public function getContent($id)
+{
+$query=$this->db->query("SELECT * FROM `fa_content` WHERE `title`='$id'")->row();
+return $query;
+}
 public function getdropdown()
 {
 $query=$this->db->query("SELECT * FROM `fa_content` ORDER BY `id` 

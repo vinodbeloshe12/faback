@@ -17,7 +17,7 @@ class email_model extends CI_Model
           'category' => 'test'
           );
 
-          print_r(json_encode($json_string));
+        //  print_r(json_encode($json_string));
      
         $params = array(
             'api_user'  => $username,
@@ -55,7 +55,7 @@ class email_model extends CI_Model
 
         // print everything out
         ////var_dump($response,curl_error($session),curl_getinfo($session));
-       print_r($response);
+      //  print_r($response);
         curl_close($session);
   }
 

@@ -130,7 +130,7 @@ public function getAllListing($catid,$subcatid){
 }
 
 public function getDetails($name){
-    $chk= $this->db->query("SELECT fa_listing.status FROM fa_listing WHERE fa_listing.bid='$name'")->row();
+       $chk= $this->db->query("SELECT fa_listing.status FROM fa_listing WHERE fa_listing.bid='$name'")->row();
     if($chk->status==1){
         $query->details=$this->db->query("SELECT fa_listing.id, fa_listing.regdate,fa_listing.type,fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,
           fa_listing.addline1, fa_listing.addline2, fa_listing.city,fa_listing.services, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.status='1' AND `fa_listing`.bid='$name'")->row();
@@ -141,7 +141,7 @@ public function getDetails($name){
              $query->videos=$this->db->query("SELECT `id`, `video`, `order` FROM `fa_videos` WHERE `lid`='$myId'")->result();
             $query->ads=[];
             $query->ads=$this->db->query("SELECT `id`, `page`, `type`, `image`, `link` FROM `fa_advertise` WHERE `lid`='$myId'")->result();
-            $query->rating=$this->db->query("SELECT `id`, `name`, `email`, `rating`, `review`, `status`,`date` FROM `fa_rating` WHERE `bid`='$myId'")->result();
+            $query->rating=$this->db->query("SELECT `id`, `name`, `email`, `rating`, `review`, `status`,`date` FROM `fa_rating` WHERE `bid`='$name'")->result();
     }else{
         $query->details=$this->db->query("SELECT fa_listing.about, fa_listing.bid,fa_listing.category as 'cid',fa_listing.subcategory as 'sid',fa_listing.buisnessname,  fa_listing.addline1, fa_listing.addline2, fa_listing.city, fa_listing.state, fa_listing.pin, fa_listing.country, fa_category.name as 'category',fa_subcategory.name as 'subcategory' FROM fa_listing LEFT OUTER JOIN fa_category ON fa_listing.category=fa_category.id LEFT OUTER JOIN fa_subcategory ON fa_listing.subcategory=fa_subcategory.id WHERE fa_listing.user='fa' AND `fa_listing`.bid='$name'")->row(); 
         $query->images=[];
@@ -153,6 +153,40 @@ public function getDetails($name){
     return $query;
 }
 
+
+
+ public function save_password($username) 
+{
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $password = array(); 
+    $alpha_length = strlen($alphabet) - 1; 
+    for ($i = 0; $i < 8; $i++) 
+    {
+        $n = rand(0, $alpha_length);
+        $password[] = $alphabet[$n];
+    }
+    $email= $this->db->query("SELECT email FROM fa_listing WHERE bid='$username'")->row();
+
+    $pwd =implode($password);
+    $data['username']=$username;
+    $data['pwd']=$pwd;
+    $viewcontent = $this->load->view('emailer/verify', $data, true);
+    $this->email_model->emailer($viewcontent,'Login Credentials - Findacross',$email->email,'');
+    $chk= $this->db->query("SELECT username FROM login WHERE username='$username'")->row();
+    if(!$chk){
+         $query = $this->db->query("INSERT INTO login(username,password)  values ('$username','$pwd')");
+        $object = new stdClass();
+        $object->value = true;
+        return $object;
+    }else{
+        $query = $this->db->query("UPDATE login SET password='$pwd' WHERE username='$username'");
+        $object = new stdClass();
+        $object->value = true;
+        return $object;
+    }
+   
+        // return implode($password); 
+}
 
 
 

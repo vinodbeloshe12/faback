@@ -940,6 +940,18 @@ $data["redirect"]="site/viewsubcategory";
 $this->load->view("redirect",$data);
 }
 
+
+public function sendPassword()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->listing_model->save_password($this->input->get("bid"));
+$data["redirect"]="site/viewlisting";
+$this->load->view("redirect",$data);
+}
+
+
+
 public function viewlisting()
 {
 $access=array("1");
@@ -949,6 +961,9 @@ $data["base_url"]=site_url("site/viewlistingjson");
 $data["title"]="View listing";
 $this->load->view("template",$data);
 }
+
+
+
 function viewlistingjson()
 {
 $elements=array();
@@ -1057,6 +1072,11 @@ $elements[20]->field="`fa_listing`.`date`";
 $elements[20]->sort="1";
 $elements[20]->header="date";
 $elements[20]->alias="date";
+$elements[21]=new stdClass();
+$elements[21]->field="`fa_listing`.`bid`";
+$elements[21]->sort="1";
+$elements[21]->header="bid";
+$elements[21]->alias="bid";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
 $orderby=$this->input->get_post("orderby");
@@ -1400,7 +1420,6 @@ $this->slider_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewslider";
 $this->load->view("redirect",$data);
 }
-
 
 
 
@@ -1888,7 +1907,7 @@ $data["title"]="Edit advertise";
 $data[ 'lid' ] =$this->advertise_model->getdropdown();
 $data[ 'status' ] =$this->category_model->getstatusdropdown();
 $data[ 'type' ] =$this->advertise_model->gettypedropdown();
-$data[ 'pagedrp' ] =$this->advertise_model->getpagedropdown();
+$data["pagedrp"] =$this->advertise_model->getpagedropdown();
 $data["before"]=$this->advertise_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }

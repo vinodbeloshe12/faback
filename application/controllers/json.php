@@ -207,6 +207,11 @@ public function getDetails(){
     $this->load->view("json",$data);  
 }
 
+public function getAutoPass(){
+     $data["message"]=$this->listing_model->random_password();
+    $this->load->view("json",$data);  
+}
+
 public function search(){
     $searchTerm=$this->input->get_post("searchTerm");
     $data["message"]=$this->listing_model->search($searchTerm);

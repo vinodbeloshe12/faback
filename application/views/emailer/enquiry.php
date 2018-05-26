@@ -16,16 +16,34 @@
                     <div style='margin:0 auto;width:90%'>
                         <div style='margin:50px auto;width:80%'>
                             <div align='center'>
-                            <img src='http://admin.findacross.com/assets/img/find.png' alt='Findacross' class='CToWUd'>
-                                </div>
+                                <img src='http://admin.findacross.com/assets/img/find.png' alt='Findacross' class='CToWUd'>
+                            </div>
                             <p style='color:#000;font-family:Roboto;font-size:20px'>Dear
                                 <span style='color:#000;font-family:Roboto;font-size:20px'>
-                                    <?php echo $name; ?>
+                                    <?php echo $bid; ?>
                                 </span>,</p>
 
-                            <p style='color:#000;font-family:Roboto;font-size:20px'>We are very excited to have you on board Findacross. Your registered email id is :
-                                <?php echo $email; ?>
+                            <p style='color:#000;font-family:Roboto;font-size:20px'>You have new Enquiry From:
+                                <?php echo $name; ?>
                             </p>
+                            
+							<table>
+							<tr>
+							<td>Email</td>
+							<td> : </td>
+							<td><?php echo $email; ?></td>
+							</tr>
+							<tr>
+							<td>Contact No.</td>
+							<td> : </td>
+							<td> <?php echo $contact; ?></td>
+							</tr>
+							<tr>
+							<td>Message</td>
+							<td> : </td>
+							<td> <?php echo $message; ?></td>
+							</tr>
+							</table>
                             <p style='color:#000;font-family:Roboto;font-size:20px'>Stay tuned for latest news and updates from the team at Findacross.
                             </p>
 
@@ -42,13 +60,13 @@
                                         <tr>
                                             <td style='padding:0 5px'>
                                                 <div>
-                                                    <span style='color:#c8c2c2;font-family:Roboto;font-size:12px'>COPYRIGHT@FINDACROSS</span>
+                                                    <span style='color:#c8c2c2;font-family:Roboto;font-size:12px'>COPYRIGHT@FINDACROSS@2018</span>
                                                 </div>
                                             </td>
                                             <td style='padding:0 5px'>
                                                 <div>
                                                     <span style='color:#c8c2c2;font-family:Roboto;font-size:12px'>CONTACT US
-                                                        <a href='tel:8898-443344' style='color:#c8c2c2;font-family:Roboto;font-size:12px;margin:0px 10px;text-decoration:none' target='_blank'>+91 9702 123 923</a>
+                                                        <a href='tel:8898-443344' style='color:#c8c2c2;font-family:Roboto;font-size:12px;margin:0px 10px;text-decoration:none' target='_blank'>+91 9702123923</a>
                                                     </span>
                                                 </div>
                                             </td>

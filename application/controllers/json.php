@@ -187,10 +187,17 @@ public function addReview(){
     $this->load->view("json",$data);  
 }
 
+public function loginuser(){
+    $username = $this->input->post('username');
+    $password = $this->input->post('password');
+    $data["message"]=$this->listing_model->loginFrontEnd($username,$password);
+    $this->load->view("json",$data);
+}
+
 public function login(){
     $username =  $this->input->post("username");
     $password =  $this->input->post("password");
-    $data["message"]=$this->listing_model->login($username,$password);
+    $data["message"]=$this->listing_model->loginuser($username,$password);
     $this->load->view("json",$data);  
 }
 
@@ -232,4 +239,17 @@ $id=$this->input->get_post("id");
 $data["message"]=$this->content_model->getContent($id);
 $this->load->view("json",$data);
 }
+
+
+public function enquiry(){
+    // $data = json_decode(file_get_contents('php://input'), true);
+    $bid = $this->input->post('bid');
+    $email = $this->input->post('email');
+    $name = $this->input->post('name');
+    $message = $this->input->post('message');
+    $contact = $this->input->post('contact');
+     $data["message"]=$this->listing_model->enquiry($bid,$email,$name,$message,$contact);
+    $this->load->view("json",$data);  
+}
+
 } ?>

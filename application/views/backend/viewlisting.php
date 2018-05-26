@@ -28,10 +28,12 @@
 function drawtable(resultrow) {
     if(resultrow.status==1){
         var status="Enabled";
+        var loginbtn="<a class='btn btn-primary' href='<?php echo site_url('site/sendPassword?bid=');?>"+resultrow.bid+"' data-position='top' data-delay='50' data-tooltip='Send Login'><i class='fa fa-key propericon'></i></a>";
     }else{
+        var loginbtn="";
         var status="Disabled";
     }
-return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.buisnessname + "</td><td>" + resultrow.city + "</td><td>" + status + "</td><td>" + resultrow.type + "</td><td>" + resultrow.date + "</td><td><a class='btn btn-primary' href='<?php echo site_url('site/sendPassword?bid=');?>"+resultrow.bid+"' data-position='top' data-delay='50' data-tooltip='Send Login'><i class='fa fa-key propericon'></i></a><a class='btn btn-primary btn-xs waves-effect waves-light blue darken-4 z-depth-0 less-pad' href='<?php echo site_url('site/editlisting?id=');?>"+resultrow.id+"' data-position='top' data-delay='50' data-tooltip='Edit'><i class='fa fa-pencil propericon'></i></a><a class='btn btn-danger btn-xs waves-effect waves-light red pad10 z-depth-0 less-pad' onclick=\"return confirm('Are you sure you want to delete?');\") href='<?php echo site_url('site/deletelisting?id='); ?>"+resultrow.id+"' data-position='top' data-delay='50' data-tooltip='Delete'><i class='material-icons propericon'>delete</i></a></td></tr>";
+return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.buisnessname + "</td><td>" + resultrow.city + "</td><td>" + status + "</td><td>" + resultrow.type + "</td><td>" + resultrow.date + "</td><td><a class='btn btn-primary btn-xs waves-effect waves-light blue darken-4 z-depth-0 less-pad' href='<?php echo site_url('site/editlisting?id=');?>"+resultrow.id+"' data-position='top' data-delay='50' data-tooltip='Edit'><i class='fa fa-pencil propericon'></i></a><a class='btn btn-danger btn-xs waves-effect waves-light red pad10 z-depth-0 less-pad' onclick=\"return confirm('Are you sure you want to delete?');\") href='<?php echo site_url('site/deletelisting?id='); ?>"+resultrow.id+"' data-position='top' data-delay='50' data-tooltip='Delete'><i class='material-icons propericon'>delete</i></a>"+ loginbtn +"</td></tr>";
 }
 generatejquery("<?php echo $base_url;?>");
 </script>

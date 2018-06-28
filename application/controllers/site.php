@@ -2138,6 +2138,31 @@ $this->load->view("redirect",$data);
 }
 
 
+public function createsitemap(){
+    // $this->load->helper('file');
+    // $data = 'My Text here';
+    
+    // if ( !write_file('./sitemap.xml', $data)){
+    //      echo 'Unable to write the file';
+    // }
+    $data ='<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'. PHP_EOL;
+    $query = $this->db->query("SELECT * FROM fa_category")->result();
+    foreach ($query as $row)
+    {
+          $str ='<url>'. PHP_EOL .
+         '<loc>http://findacross.com/'.strtolower($row->name).'.html</loc>'. PHP_EOL .
+         ' <changefreq>monthly</changefreq>'. PHP_EOL .
+         '<priority>0.80</priority>'. PHP_EOL .
+         ' </url>'. PHP_EOL;
+          $data .= $str;
+          }
+
+          $data .= '</urlset>';
+     file_put_contents("sitemap.xml",$data);
+  
+}
+
+
 }
 ?>
 

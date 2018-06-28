@@ -252,4 +252,66 @@ public function enquiry(){
     $this->load->view("json",$data);  
 }
 
+public function do_upload()
+{
+    $config['upload_path'] = './uploads/';
+    $config['allowed_types'] = '*';
+    $this->load->library('upload', $config);
+    $filename = 'multipleUpload';
+    $userId = $this->input->get_post("bid");
+echo $filename;
+echo '@@@@@';
+echo $userId;
+    $resume = '';
+    if ($this->upload->do_upload($filename)) {
+        $uploaddata = $this->upload->data();
+        $resume = $uploaddata['file_name'];
+        $config_r['source_pdf'] = './uploads/'.$uploaddata['file_name'];
+        // $data['message'] = $this->restapi_model->careersSubmit($name, $email, $mobile, $message, $resume);
+        // $data['redirect'] = $url;
+        $this->load->view("json",$data);
+}
+}
+
+
+public function uploadImage(){
+    $userId = $this->input->get_post("bid");
+    // $userId = $this->session->userdata("id");
+    echo $userId;
+    $file_path = "./images/" . $userId . '/';
+
+    print_r($_FILES;
+    if (isset($_FILES['multipleUpload'])) {
+
+        if (!is_dir('images/' . $userId)) {
+            mkdir('./images/' . $userId, 0777, TRUE);
+        }
+
+        $files = $_FILES;
+        $cpt = count($_FILES ['multipleUpload'] ['name']);
+
+        for ($i = 0; $i < $cpt; $i ++) {
+
+            $name = time().$files ['multipleUpload'] ['name'] [$i];
+            $_FILES ['multipleUpload'] ['name'] = $name;
+            $_FILES ['multipleUpload'] ['type'] = $files ['multipleUpload'] ['type'] [$i];
+            $_FILES ['multipleUpload'] ['tmp_name'] = $files ['multipleUpload'] ['tmp_name'] [$i];
+            $_FILES ['multipleUpload'] ['error'] = $files ['multipleUpload'] ['error'] [$i];
+            $_FILES ['multipleUpload'] ['size'] = $files ['multipleUpload'] ['size'] [$i];
+
+            $this->upload->initialize($this->set_upload_options($file_path));
+            if(!($this->upload->do_upload('multipleUpload')) || $files ['multipleUpload'] ['error'] [$i] !=0)
+            {
+                print_r($this->upload->display_errors());
+            }
+            else
+            {
+                // $this->load->model('uploadModel','um');
+                // $this->um->insertRecord($user,$name);
+                return $userId;
+            }
+        }
+    } 
+}
+
 } ?>

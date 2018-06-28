@@ -1,3 +1,0 @@
-add order column in category & subcategory
-add link in slider table
-add service in listing

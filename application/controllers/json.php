@@ -1,6 +1,29 @@
 <?php if ( ! defined("BASEPATH")) exit("No direct script access allowed");
 class Json extends CI_Controller 
-{function getallcategory1()
+{
+    
+    
+    public function addUser(){
+      $data = json_decode(file_get_contents('php://input'), true);
+      $uid= $data['userId'];
+      $refid= $data['refId'];
+      $name = $data['name'];
+      $contact = $data['contact'];
+      $contact = $this->input->post('contact');
+      $status = 1;
+      $data["message"]=$this->listing_model->addUser($uid,$refid,$name,$contact,$status);
+      $this->load->view("json",$data);  
+  }
+
+
+  public function getTree(){
+    $id=$this->input->get_post("id");
+    $data["message"]=$this->listing_model->getTree($id);
+    $this->load->view("json",$data);  
+    }
+
+
+function getallcategory1()
 {
 $elements=array();
 $elements[0]=new stdClass();
@@ -135,7 +158,7 @@ $this->load->view("json",$data);
 }
 
 public function getAllCategory(){
-    $data["message"]=$this->category_model->getAllCategory();
+      $data["message"]=$this->category_model->getAllCategory();
     $this->load->view("json",$data);  
 }
 
@@ -280,7 +303,7 @@ public function uploadImage(){
     echo $userId;
     $file_path = "./images/" . $userId . '/';
 
-    print_r($_FILES;
+    // print_r($_FILES;
     if (isset($_FILES['multipleUpload'])) {
 
         if (!is_dir('images/' . $userId)) {
@@ -313,5 +336,9 @@ public function uploadImage(){
         }
     } 
 }
+
+
+
+
 
 } ?>

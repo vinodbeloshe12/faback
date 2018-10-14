@@ -3,6 +3,28 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class listing_model extends CI_Model
 {
+
+    public function addUser($uid,$refid,$name,$contact,$status){
+        $data=array("userid" => $uid,"parentid" => $refid,"name" => $name,"contact" => $contact,"status" => $status);
+         $query=$this->db->insert( "mlm_user", $data );
+      if(!$query)
+         return  false;
+         else
+         return  true;
+     }
+
+
+     public function getTree($id){
+         $q ="select id, name, parentid from (select * from mlm_user order by parentid, id) products_sorted, (select @pv := $id) initialisation where find_in_set(parentid, @pv) and length(@pv := concat(@pv, ',', id))";
+        $query=$this->db->query($q)->result();
+        if($query){
+            return $query;
+        }else{
+            return [];
+        }
+     }
+
+     
 public function search($searchTerm){
     if((strlen($searchTerm))>2){
     $query=$this->db->query("SELECT `id`, `bid`, `category`, `subcategory`, `regdate`, `buisnessname`, `cperson`, `contact`, `addline1`, `addline2`, `city`, `state`, `pin`, `country`,  `about`, `email`, `facebook`,`keywords`, `twitter`, `google`, `linkedin` FROM `fa_listing` WHERE city like '%$searchTerm%' OR keywords like '%$searchTerm%' OR bid like '%$searchTerm%' OR buisnessname like '%$searchTerm%'")->result();
@@ -253,6 +275,10 @@ $return[$row->id]=$row->name;
 }
 return $return;
 }
+
+
+
+
 }
 ?>
 

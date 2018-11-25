@@ -22,6 +22,13 @@ class Json extends CI_Controller
     $this->load->view("json",$data);  
     }
 
+    public function mlmLogin(){
+        // $data = json_decode(file_get_contents('php://input'), true);
+        // $uid= $data['userId'];
+        $uid=$this->input->get_post("userId");
+        $data["message"]=$this->listing_model->mlmLogin($uid);
+        $this->load->view("json",$data);  
+    }
 
 function getallcategory1()
 {

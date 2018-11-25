@@ -15,7 +15,7 @@ class listing_model extends CI_Model
 
 
      public function getTree($id){
-         $q ="select id, name, parentid from (select * from mlm_user order by parentid, id) products_sorted, (select @pv := $id) initialisation where find_in_set(parentid, @pv) and length(@pv := concat(@pv, ',', id))";
+         $q ="select id, userid,name, parentid from (select * from mlm_user order by parentid, id) products_sorted, (select @pv := $id) initialisation where find_in_set(parentid, @pv) and length(@pv := concat(@pv, ',', id))";
         $query=$this->db->query($q)->result();
         if($query){
             return $query;
@@ -24,6 +24,16 @@ class listing_model extends CI_Model
         }
      }
 
+
+     public function mlmLogin($uid){
+     $query=$this->db->query("SELECT * FROM `mlm_user` WHERE userid=$uid")->result();
+     if($query){
+        return $query;
+    }else{
+        return [];
+    }
+    
+    }
      
 public function search($searchTerm){
     if((strlen($searchTerm))>2){
